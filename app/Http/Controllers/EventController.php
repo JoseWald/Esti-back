@@ -10,9 +10,8 @@ class EventController extends Controller
    
     public function index()
     {
-        /*$events = Event::all(); 
-        return response()->json($events);*/
-        return response()->json(['message' => 'atteint']);
+        $events = Event::all(); 
+        return response()->json($events);
     }
 
     

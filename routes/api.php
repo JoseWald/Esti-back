@@ -12,11 +12,11 @@ Route::get('/user', function (Request $request) {
 Route::post('/login', [AdminAuthController::class, 'login']);
 Route::post('/logout', [AdminAuthController::class, 'logout'])->middleware('auth:sanctum');
 
-Route::post('/events', [EventController::class, 'store']); 
+
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/events', [EventController::class, 'index']); 
-    Route::get('/events/{id}', [EventController::class, 'show']); 
-    
+    Route::post('/events', [EventController::class, 'store']); 
     Route::put('/events/{id}', [EventController::class, 'update']); 
     Route::delete('/events/{id}', [EventController::class, 'destroy']);
 });
+Route::get('/events', [EventController::class, 'index']); 
+Route::get('/events/{id}', [EventController::class, 'show']); 
