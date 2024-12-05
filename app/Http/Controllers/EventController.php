@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Event;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+
 
 class EventController extends Controller
 {
@@ -75,7 +77,18 @@ class EventController extends Controller
     {
      
         $event = Event::findOrFail($id);
+
+        if ($event->image) {
+            $imagePath = public_path('storage/' . $event->image);
     
+            if (file_exists($imagePath)) {
+              
+                unlink($imagePath);
+            } else {
+              
+                Log::error("Image not found: " . $imagePath);
+            }
+        }
         $event->delete();
 
         return response()->json(null, 204); 
