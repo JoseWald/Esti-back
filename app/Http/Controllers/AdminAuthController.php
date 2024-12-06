@@ -26,7 +26,7 @@ class AdminAuthController extends Controller
      
         $token = $admin->createToken('AdminApp')->plainTextToken;
 
-        return response()->json(['token' => $token]);
+        return response()->json(['token' => $token],200);
     }
 
  

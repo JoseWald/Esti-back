@@ -20,6 +20,9 @@ class EventController extends Controller
     public function show($id)
     {
         $event = Event::findOrFail($id); 
+        if ($event->image) {
+            $event->image = asset('storage/' . $event->image);  
+        }
         return response()->json($event); 
     }
 
@@ -48,29 +51,6 @@ class EventController extends Controller
         return response()->json($event, 201);
     }
 
-    public function update(Request $request, $id)
-    {
-       
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
-            'date' => 'required|date',
-            'image' => 'required|string',
-        ]);
-
-       
-        $event = Event::findOrFail($id);
-
-      
-        $event->update([
-            'title' => $request->title,
-            'description' => $request->description,
-            'date' => $request->date,
-            'image' => $request->image, 
-        ]);
-
-        return response()->json($event); 
-    }
 
  
     public function destroy($id)
