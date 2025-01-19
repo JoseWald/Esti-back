@@ -5,6 +5,7 @@ use App\Http\Controllers\AdminInfo;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\AdminAuthController;
+use App\Http\Controllers\RegistrationController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -25,3 +26,11 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 Route::get('/events', [EventController::class, 'index']); 
 Route::get('/events/{id}', [EventController::class, 'show']); 
+
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/registrations', [RegistrationController::class, 'index']); 
+    Route::get('/registrations/{id}', [RegistrationController::class, 'show']); 
+    Route::delete('/registrations/{id}', [RegistrationController::class, 'destroy']); 
+});
+Route::post('/PostRegistration',[RegistrationController::class,'sotre']);
