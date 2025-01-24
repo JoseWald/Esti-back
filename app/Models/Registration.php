@@ -30,5 +30,6 @@ class Registration extends Model
         'parent_contact',
         'invoice_path',
         'grade_sheet_path',
+        'state'
     ];
 }

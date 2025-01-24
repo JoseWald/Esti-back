@@ -33,4 +33,4 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/registrations/{id}', [RegistrationController::class, 'show']); 
     Route::delete('/registrations/{id}', [RegistrationController::class, 'destroy']); 
 });
-Route::post('/PostRegistration',[RegistrationController::class,'sotre']);
+Route::post('/PostRegistration',[RegistrationController::class,'store']);
