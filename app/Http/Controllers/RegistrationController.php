@@ -28,15 +28,15 @@ class RegistrationController extends Controller
         'mother_name' => 'required|string|max:255',
         'mother_job' => 'required|string|max:255',
         'parent_contact' => 'required|string|max:15',
-        'invoice' => 'required|file|mimes:pdf,jpg,png',
-        'grade_sheet' => 'required|file|mimes:pdf,jpg,png',
+        'invoice_path' => 'required|file|mimes:pdf,jpg,png',
+        'grade_sheet_path' => 'required|file|mimes:pdf,jpg,png',
         'state' => 'nullable|boolean',
     ]);
 
   
     $photoPath = $request->file('photo')->store('photos', 'public'); 
-    $invoicePath = $request->file('invoice')->store('invoices', 'public');
-    $gradeSheetPath = $request->file('grade_sheet')->store('grade_sheets', 'public');
+    $invoice_pathPath = $request->file('invoice_path')->store('invoice_paths', 'public');
+    $gradeSheetPath = $request->file('grade_sheet_path')->store('grade_sheet_paths', 'public');
 
 
 $registration = Registration::create([
@@ -56,8 +56,8 @@ $registration = Registration::create([
     'mother_name' => $request->mother_name,
     'mother_job' => $request->mother_job,
     'parent_contact' => $request->parent_contact,
-    'invoice_path' => $invoicePath,
-    'grade_sheet_path' => $gradeSheetPath,
+    'invoice_path_path' => $invoice_pathPath,
+    'grade_sheet_path_path' => $gradeSheetPath,
     'state' => false
 ]);
     return response()->json($registration, 201);
@@ -70,8 +70,15 @@ $registration = Registration::create([
     public function index()
     {
         
-        $Registrations = Registration::all();
-        return response()->json($Registrations);
+        $registrations = Registration::all();
+
+        foreach ($registrations as $registration) {
+            if ($registration->photo_path) {
+                $registration->photo_path = asset('storage/' . $registration->photo_path);
+            }
+        }
+    
+        return response()->json($registrations);
     }
 
     /**
@@ -82,14 +89,14 @@ $registration = Registration::create([
         $Registration = Registration::findOrFail($id);
 
         
-        if ($Registration->photo) {
-            $Registration->photo = asset('storage/' . $Registration->photo);
+        if ($Registration->photo_path) {
+            $Registration->photo_path = asset('storage/' . $Registration->photo_path);
         }
-        if ($Registration->invoice) {
-            $Registration->invoice = asset('storage/' . $Registration->invoice);
+        if ($Registration->invoice_path) {
+            $Registration->invoice_path = asset('storage/' . $Registration->invoice_path);
         }
-        if ($Registration->grade_sheet) {
-            $Registration->grade_sheet = asset('storage/' . $Registration->grade_sheet);
+        if ($Registration->grade_sheet_path) {
+            $Registration->grade_sheet_path = asset('storage/' . $Registration->grade_sheet_path);
         }
 
         return response()->json($Registration);
@@ -105,16 +112,26 @@ $registration = Registration::create([
         if ($Registration->photo) {
             Storage::delete('public/' . $Registration->photo);
         }
-        if ($Registration->invoice) {
-            Storage::delete('public/' . $Registration->invoice);
+        if ($Registration->invoice_path) {
+            Storage::delete('public/' . $Registration->invoice_path);
         }
-        if ($Registration->grade_sheet) {
-            Storage::delete('public/' . $Registration->grade_sheet);
+        if ($Registration->grade_sheet_path) {
+            Storage::delete('public/' . $Registration->grade_sheet_path);
         }
 
        
         $Registration->delete();
 
+        return response()->json(null, 204);
+    }
+
+    /**
+     * Approve a pre-registration
+     */
+    public function approve($id){
+        $Registration = Registration::findOrFail($id);
+        $Registration->state = true;
+        $Registration->save();
         return response()->json(null, 204);
     }
 }

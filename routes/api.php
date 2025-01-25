@@ -31,6 +31,8 @@ Route::get('/events/{id}', [EventController::class, 'show']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/registrations', [RegistrationController::class, 'index']); 
     Route::get('/registrations/{id}', [RegistrationController::class, 'show']); 
-    Route::delete('/registrations/{id}', [RegistrationController::class, 'destroy']); 
+    Route::delete('/registrations/{id}', [RegistrationController::class, 'destroy']);
+    Route::put('registrations/{id}', [RegistrationController::class, 'approve']); 
 });
+
 Route::post('/PostRegistration',[RegistrationController::class,'store']);
