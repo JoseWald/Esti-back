@@ -35,7 +35,7 @@ class RegistrationController extends Controller
 
   
     $photoPath = $request->file('photo')->store('photos', 'public'); 
-    $invoice_pathPath = $request->file('invoice_path')->store('invoice_paths', 'public');
+    $invoice_path = $request->file('invoice_path')->store('invoice_paths', 'public');
     $gradeSheetPath = $request->file('grade_sheet_path')->store('grade_sheet_paths', 'public');
 
 
@@ -56,8 +56,8 @@ $registration = Registration::create([
     'mother_name' => $request->mother_name,
     'mother_job' => $request->mother_job,
     'parent_contact' => $request->parent_contact,
-    'invoice_path_path' => $invoice_pathPath,
-    'grade_sheet_path_path' => $gradeSheetPath,
+    'invoice_path' => $invoice_path,
+    'grade_sheet_path' => $gradeSheetPath,
     'state' => false
 ]);
     return response()->json($registration, 201);
